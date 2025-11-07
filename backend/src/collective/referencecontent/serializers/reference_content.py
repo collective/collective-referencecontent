@@ -5,9 +5,16 @@ from plone.restapi.interfaces import ISerializeToJson
 
 # from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.dxcontent import SerializeToJson as DXSerializeToJson
+
+# from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import implementer
+
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 @implementer(ISerializeToJson)
@@ -26,16 +33,15 @@ class SerializeToJson(DXSerializeToJson):
                 include_items=include_items,
                 include_expansion=include_expansion,
             )
-            # TODO: skip some attributes like those that are structural (path, actions,
-            #       ...) and some explicitly defined in the schema
+            # use base value for some attributes like those that are structural
+            # (path, id, actions, ...)
             for attr in ["@components", "UID", "id", "@type", "lock", "parent"]:
                 if attr in base:
                     proxied[attr] = base[attr]
-                # else:
-                #     print(f"missing {attr}")
+            # use base value for the attributes explictely definied in the schema
             for schema in iterSchemata(self.context):
                 # skip schema that we can fetch from original (evaluate to
-                # remove behaviors from the CT)
+                # remove some behaviors from the CT)
                 if schema.getName() in [
                     "IBasic",
                     "IAllowDiscussion",
@@ -45,21 +51,11 @@ class SerializeToJson(DXSerializeToJson):
                     "IPublication",
                     "ICategorization",
                 ]:
-                    # print(f"skipping {schema.getName()}")
+                    logger.debug("skipping", schema.getName())
                     continue
                 for attr in schema.names():
                     if attr in base:
                         proxied[attr] = base[attr]
-                    # else:
-                    #     print(f"missing {attr}")
             return proxied
-            # for (k, v) in proxied.items():
-            #     if k in ["layout"]:
-            #         base[k] = v
-            #     elif k not in base:
-            #         base[k] = v
-            #     else:
-            #         print(f"duplicate {k}")
-            # return base
         else:
             return base

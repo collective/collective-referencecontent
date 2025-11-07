@@ -31,3 +31,8 @@ class IReferenceContent(model.Schema):
 @implementer(IReferenceContent)
 class ReferenceContent(Item):
     """Content-type class for ReferenceContent"""
+
+    def Title(self):
+        if self.proxied_content:
+            return self.proxied_content[0].to_object.Title()
+        return super().Title()
