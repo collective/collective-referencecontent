@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    >
+
+  <adapter
+      factory=".catalog.ReferenceContentIndexableWrapper"
+      provides="plone.indexer.interfaces.IIndexableObject"
+      for="collective.referencecontent.content.reference_content.IReferenceContent
+           Products.ZCatalog.interfaces.IZCatalog"
+      />
+
+</configure>

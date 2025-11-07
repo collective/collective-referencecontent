@@ -5,5 +5,9 @@
     >
 
   <!-- -*- extra stuff goes here -*- -->
+  <permission
+      id="collective.referencecontent.AddReferenceContent"
+      title="collective.referencecontent: Add ReferenceContent"
+      />
 
 </configure>

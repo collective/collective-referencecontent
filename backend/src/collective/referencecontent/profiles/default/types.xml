@@ -2,9 +2,8 @@
 <object meta_type="Plone Types Tool"
         name="portal_types"
 >
-  <!--
+  <property name="title">Controls the available contenttypes in your portal</property>
   <object meta_type="Dexterity FTI"
-          name="MyType"
+          name="ReferenceContent"
   />
--->
 </object>
