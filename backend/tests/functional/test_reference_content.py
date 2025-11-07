@@ -48,4 +48,4 @@ def test_reference_content_proxies_catalog_metadata(request, functional):
 
     # The id should be from the ReferenceContent itself
     assert brain.getId == "reference-content"
-    assert brain.UID == reference_content.UID()
+    assert reference_content.UID() == brain.UID
