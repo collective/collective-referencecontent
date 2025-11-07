@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME_PREFIX: ghcr.io/collective/collective-referencecontent
+  IMAGE_NAME_PREFIX: ghcr.io/RedTurtle/collective-referencecontent
   NODE_VERSION: "24.x"
   PYTHON_VERSION: "3.12"
 
