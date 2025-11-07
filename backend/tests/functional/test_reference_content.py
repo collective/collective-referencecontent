@@ -4,6 +4,7 @@ from plone.app.testing import TEST_USER_ID
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+
 import pytest
 import transaction
 

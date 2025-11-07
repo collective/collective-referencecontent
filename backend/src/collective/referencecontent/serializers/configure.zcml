@@ -1,6 +1,7 @@
 <configure xmlns="http://namespaces.zope.org/zope">
 
   <!-- Serializers -->
+  <adapter factory=".reference_content.SerializeToJson" />
 
   <utility
       factory=".summary.JSONSummarySerializerMetadata"
