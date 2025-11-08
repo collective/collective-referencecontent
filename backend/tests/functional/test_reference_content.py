@@ -4,7 +4,9 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
+from zope.event import notify
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import ObjectModifiedEvent
 
 import pytest
 import transaction
@@ -70,3 +72,90 @@ def test_reference_content_proxies_catalog_metadata(request, functional):
     # reference event also have start/end metadata
     assert event_ref_brain.start == proxied_event.start
     assert event_ref_brain.end == proxied_event.end
+
+
+@pytest.mark.functional
+def test_reference_content_get_sync_also_on_status_change(request, functional):
+    """"""
+    portal = functional["portal"]
+    setRoles(portal, TEST_USER_ID, ["Manager"])
+    catalog = api.portal.get_tool("portal_catalog")
+    intids = getUtility(IIntIds)
+
+    proxied_doc = api.content.create(
+        container=portal,
+        type="Document",
+        id="proxied-doc",
+        title="Proxied Document",
+        description="This is the description.",
+        subject=["one", "two"],
+    )
+    doc_intid = intids.getId(proxied_doc)
+
+    reference_content = api.content.create(
+        container=portal,
+        type="ReferenceContent",
+        id="reference-content",
+        title="My Reference",
+        proxied_content=[RelationValue(doc_intid)],
+    )
+
+    transaction.commit()
+
+    brain = catalog(UID=reference_content.UID())[0]
+
+    assert api.content.get_state(obj=proxied_doc) == "private"
+    assert brain.review_state == api.content.get_state(obj=proxied_doc)
+
+    api.content.transition(obj=proxied_doc, transition="publish")
+    transaction.commit()
+
+    brain = catalog(UID=reference_content.UID())[0]
+    assert api.content.get_state(obj=proxied_doc) == "published"
+    assert brain.review_state == api.content.get_state(obj=proxied_doc)
+
+
+@pytest.mark.functional
+def test_reference_content_get_sync_on_original_content_modify_event(
+    request, functional
+):
+    """"""
+    portal = functional["portal"]
+    setRoles(portal, TEST_USER_ID, ["Manager"])
+    catalog = api.portal.get_tool("portal_catalog")
+    intids = getUtility(IIntIds)
+
+    proxied_doc = api.content.create(
+        container=portal,
+        type="Document",
+        id="proxied-doc",
+        title="Proxied Document",
+        description="This is the description.",
+    )
+    doc_intid = intids.getId(proxied_doc)
+
+    reference_content = api.content.create(
+        container=portal,
+        type="ReferenceContent",
+        id="reference-content",
+        title="My Reference",
+        proxied_content=[RelationValue(doc_intid)],
+    )
+
+    transaction.commit()
+
+    brain = catalog(UID=reference_content.UID())[0]
+
+    assert brain.Title == proxied_doc.title
+    assert brain.Description == proxied_doc.description
+    assert brain.Subject == proxied_doc.subject
+    assert proxied_doc.subject == ()
+
+    proxied_doc.subject = ("one", "two")
+
+    notify(ObjectModifiedEvent(proxied_doc))
+    transaction.commit()
+
+    brain = catalog(UID=reference_content.UID())[0]
+    assert brain.Subject == proxied_doc.subject
+    assert proxied_doc.subject == ("one", "two")

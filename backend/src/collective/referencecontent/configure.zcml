@@ -18,6 +18,7 @@
 
   <include package=".adapters" />
   <include package=".controlpanels" />
+  <include package=".events" />
   <include package=".indexers" />
   <include package=".serializers" />
   <include package=".vocabularies" />
