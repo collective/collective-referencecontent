@@ -7,11 +7,11 @@
 
   <!-- -*- extra stuff goes here -*- -->
   <browser:page
-      class=".settings.ReferenceContentSettings"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      layer="collective.referencecontent.interfaces.IBrowserLayer"
       name="reference-content-settings"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".settings.ReferenceContentSettings"
       permission="collective.referencecontent.ManageSettings"
-  />
+      layer="collective.referencecontent.interfaces.IBrowserLayer"
+      />
 
 </configure>

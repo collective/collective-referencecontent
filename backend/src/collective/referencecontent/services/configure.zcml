@@ -16,8 +16,9 @@
       />
 
   <adapter
-        factory=".controlpanel.ReferenceContentSettingsControlpanel"
-        provides="collective.referencecontent.controlpanels.settings.IReferenceContentSettings"
-        name="reference-content-settings" />
+      factory=".controlpanel.ReferenceContentSettingsControlpanel"
+      provides="collective.referencecontent.controlpanels.settings.IReferenceContentSettings"
+      name="reference-content-settings"
+      />
 
 </configure>

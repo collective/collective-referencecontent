@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.referencecontent.controlpanels.settings import IReferenceContentSettings
 from collective.referencecontent.interfaces import IBrowserLayer
 from plone.restapi.controlpanels import RegistryConfigletPanel

@@ -2,10 +2,10 @@
 <object name="portal_controlpanel">
 
   <!-- -*- extra stuff goes here -*- -->
-  <configlet
-        title="Reference Content"
-        action_id="ReferenceContentSettings"
-        appId="collective.referencecontent"
-        remove="true">
+  <configlet action_id="ReferenceContentSettings"
+             appId="collective.referencecontent"
+             remove="true"
+             title="Reference Content"
+  >
     </configlet>
 </object>

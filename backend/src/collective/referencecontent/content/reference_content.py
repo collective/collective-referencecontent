@@ -1,4 +1,6 @@
 from collective.referencecontent import _
+from collective.referencecontent.controlpanels.settings import IReferenceContentSettings
+from plone import api
 from plone.app.content.interfaces import INameFromTitle
 from plone.app.z3cform.widget import RelatedItemsFieldWidget
 from plone.autoform import directives
@@ -9,8 +11,6 @@ from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope.interface import implementer
 from zope.schema import TextLine
-from collective.referencecontent.controlpanels.settings import IReferenceContentSettings
-from plone import api
 
 
 def get_selectable_types():

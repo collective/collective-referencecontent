@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<object
-    name="portal_controlpanel"
-    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    i18n:domain="collective.referencecontent"
-    purge="False">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        name="portal_controlpanel"
+        purge="False"
+        i18n:domain="collective.referencecontent"
+>
 
 
   <!-- -*- extra stuff goes here -*- -->
-  <configlet
-        title="Reference Content"
-        action_id="ReferenceContentSettings"
-        appId="collective.referencecontent"
-        category="Products"
-        condition_expr=""
-        url_expr="string:${portal_url}/@@reference-content-settings"
-        icon_expr=""
-        visible="True"
-        i18n:attributes="title">
-        <permission>collective.referencecontent: Manage Settings</permission>
-    </configlet>
+  <configlet action_id="ReferenceContentSettings"
+             appId="collective.referencecontent"
+             category="Products"
+             condition_expr=""
+             icon_expr=""
+             title="Reference Content"
+             url_expr="string:${portal_url}/@@reference-content-settings"
+             visible="True"
+             i18n:attributes="title"
+  >
+    <permission>collective.referencecontent: Manage Settings</permission>
+  </configlet>
 </object>

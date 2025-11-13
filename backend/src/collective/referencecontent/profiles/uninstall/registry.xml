@@ -4,6 +4,8 @@
 >
 
   <!-- -*- extra stuff goes here -*- -->
-  <records interface="collective.referencecontent.controlpanels.settings.IReferenceContentSettings" remove="true"/>
+  <records interface="collective.referencecontent.controlpanels.settings.IReferenceContentSettings"
+           remove="true"
+  />
 
 </registry>
