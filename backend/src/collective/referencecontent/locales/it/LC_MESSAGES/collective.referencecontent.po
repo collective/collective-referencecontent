@@ -1,6 +1,3 @@
-#--- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-#SOME DESCRIPTIVE TITLE.
-#FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -15,58 +12,58 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: collective.referencecontent\n"
+"Domain: DOMAIN\n"
 
 #: collective/referencecontent/profiles.zcml:22
 msgid "Create example content to showcase the new website"
-msgstr ""
+msgstr "Crea un contenuto di esempio per il nuovo sito"
 
 #: collective/referencecontent/profiles.zcml:13
 msgid "Package to configure a new Plone Add-On for alias contents site"
-msgstr ""
+msgstr "Add-on per gestire alias di contenuti"
 
 #: collective/referencecontent/profiles.zcml:22
 msgid "Plone Add-On for alias contents: Example content"
-msgstr ""
+msgstr "Add-on per gestire alias di contenuti: contenuti di esempio"
 
 #: collective/referencecontent/profiles.zcml:13
 msgid "Plone Add-On for alias contents: Install"
-msgstr ""
+msgstr "Add-on per gestire alias di contenuti: Installa"
 
 #: collective/referencecontent/profiles.zcml:30
 msgid "Plone Add-On for alias contents: Uninstall"
-msgstr ""
+msgstr "Add-on per gestire alias di contenuti: Disinstalla"
 
 #: collective/referencecontent/profiles/default/controlpanel.xml
 #: collective/referencecontent/profiles/default/types/ReferenceContent.xml
 msgid "Reference Content"
-msgstr ""
+msgstr "Contenuto Alias"
 
 #: collective/referencecontent/profiles.zcml:30
 msgid "Uninstall Plone Add-On for alias contents setup."
-msgstr ""
+msgstr "Disinstalla"
 
 #. Default: "Proxied content"
 #: collective/referencecontent/content/reference_content.py:31
 msgid "proxied_content"
-msgstr ""
+msgstr "Contenuto da proxare"
 
 #. Default: "Reference Content"
 #: collective/referencecontent/controlpanels/settings.py:28
 msgid "reference_content_settings_label"
-msgstr ""
+msgstr "Contenuti alias"
 
 #. Default: "Select a list of portal types that can be referenced. Leave empty to allow all types."
 #: collective/referencecontent/controlpanels/settings.py:14
 msgid "referenceable_types_help"
-msgstr ""
+msgstr "Seleziona una lista di portal-types che possono essere referenziati. Lascia il campo vuoto, per abilitarli tutti."
 
 #. Default: "Referenceable portal types"
 #: collective/referencecontent/controlpanels/settings.py:13
 msgid "referenceable_types_label"
-msgstr ""
+msgstr "Contenuti referenziabili"
 
 #. Default: "Title"
 #: collective/referencecontent/content/reference_content.py:27
 msgid "title"
-msgstr ""
+msgstr "Titolo"

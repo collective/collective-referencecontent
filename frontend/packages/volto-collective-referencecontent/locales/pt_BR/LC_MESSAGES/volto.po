@@ -15,3 +15,8 @@ msgstr ""
 "Language-Name: Português do Brasil\n"
 "Preferred-Encodings: utf-8\n"
 "Domain: volto\n"
+
+#. Default: "This is a reference of {title}"
+#: components/ReferenceContentToastsFactory/ReferenceContentToastsFactory
+msgid "This is a reference of {title}"
+msgstr ""

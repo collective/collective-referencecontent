@@ -1,10 +1,9 @@
 import type { ConfigType } from '@plone/registry';
-
+import ReferenceContentToastsFactory from "../components/ReferenceContentToastsFactory/ReferenceContentToastsFactory"
 export default function install(config: ConfigType) {
-  // Language settings
-  config.settings.isMultilingual = false;
-  config.settings.supportedLanguages = ['en'];
-  config.settings.defaultLanguage = 'en';
-
+  config.settings.appExtras = [
+    ...(config.settings.appExtras || []),
+    {match: "", component: ReferenceContentToastsFactory}
+  ];
   return config;
 }

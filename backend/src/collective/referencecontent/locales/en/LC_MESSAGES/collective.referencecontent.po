@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-25 17:12+0000\n"
+"POT-Creation-Date: 2025-11-13 13:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,3 +13,57 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: collective/referencecontent/profiles.zcml:22
+msgid "Create example content to showcase the new website"
+msgstr ""
+
+#: collective/referencecontent/profiles.zcml:13
+msgid "Package to configure a new Plone Add-On for alias contents site"
+msgstr ""
+
+#: collective/referencecontent/profiles.zcml:22
+msgid "Plone Add-On for alias contents: Example content"
+msgstr ""
+
+#: collective/referencecontent/profiles.zcml:13
+msgid "Plone Add-On for alias contents: Install"
+msgstr ""
+
+#: collective/referencecontent/profiles.zcml:30
+msgid "Plone Add-On for alias contents: Uninstall"
+msgstr ""
+
+#: collective/referencecontent/profiles/default/controlpanel.xml
+#: collective/referencecontent/profiles/default/types/ReferenceContent.xml
+msgid "Reference Content"
+msgstr ""
+
+#: collective/referencecontent/profiles.zcml:30
+msgid "Uninstall Plone Add-On for alias contents setup."
+msgstr ""
+
+#. Default: "Proxied content"
+#: collective/referencecontent/content/reference_content.py:31
+msgid "proxied_content"
+msgstr ""
+
+#. Default: "Reference Content"
+#: collective/referencecontent/controlpanels/settings.py:28
+msgid "reference_content_settings_label"
+msgstr ""
+
+#. Default: "Select a list of portal types that can be referenced. Leave empty to allow all types."
+#: collective/referencecontent/controlpanels/settings.py:14
+msgid "referenceable_types_help"
+msgstr ""
+
+#. Default: "Referenceable portal types"
+#: collective/referencecontent/controlpanels/settings.py:13
+msgid "referenceable_types_label"
+msgstr ""
+
+#. Default: "Title"
+#: collective/referencecontent/content/reference_content.py:27
+msgid "title"
+msgstr ""
