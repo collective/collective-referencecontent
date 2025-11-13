@@ -10,5 +10,9 @@
       <role name="Owner" />
       <role name="Contributor" />
     </permission>
+    <permission acquire="True" name="collective.referencecontent: Manage Settings">
+      <role name="Manager" />
+      <role name="Site Administrator" />
+    </permission>
   </permissions>
 </rolemap>

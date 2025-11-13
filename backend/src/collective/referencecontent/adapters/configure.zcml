@@ -12,4 +12,5 @@
            Products.ZCatalog.interfaces.IZCatalog"
       />
 
+  <adapter factory=".workflow.ProxyWorkflowChain" />
 </configure>

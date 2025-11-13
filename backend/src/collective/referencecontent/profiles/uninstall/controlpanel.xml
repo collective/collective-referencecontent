@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<object name="portal_controlpanel">
+
+  <!-- -*- extra stuff goes here -*- -->
+  <configlet
+        title="Reference Content"
+        action_id="ReferenceContentSettings"
+        appId="collective.referencecontent"
+        remove="true">
+    </configlet>
+</object>

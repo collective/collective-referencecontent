@@ -1,11 +1,5 @@
-from datetime import datetime
 from plone import api
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
-from z3c.relationfield.relation import RelationValue
-from zope.component import getUtility
 from zope.event import notify
-from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 
 import pytest
@@ -13,48 +7,52 @@ import transaction
 
 
 @pytest.mark.functional
-def test_reference_content_proxies_catalog_metadata(request, functional):
-    """Validate that the reference content indexes proxied metadata."""
-    portal = functional["portal"]
-    setRoles(portal, TEST_USER_ID, ["Manager"])
-    catalog = api.portal.get_tool("portal_catalog")
-    intids = getUtility(IIntIds)
+def test_reference_content_created_with_id_and_title_from_proxied_content(
+    create_contents,
+):
+    """Validate that the reference content copy title and id from proxy."""
+    proxied_doc, reference_content = create_contents
 
-    proxied_doc = api.content.create(
-        container=portal,
-        type="Document",
-        id="proxied-doc",
-        title="Proxied Document",
-        description="This is the description.",
-        subject=["one", "two"],
-    )
-    doc_intid = intids.getId(proxied_doc)
+    assert reference_content.getId() == proxied_doc.getId() + "-1"
+    assert reference_content.Title() == proxied_doc.Title()
 
-    proxied_event = api.content.create(
-        container=portal,
-        type="Event",
-        id="proxied-even",
-        title="Proxied Event",
-        start=datetime(2024, 4, 22, 12, 0),
-        end=datetime(2024, 4, 22, 12, 0),
-    )
-    event_intid = intids.getId(proxied_event)
 
-    reference_content = api.content.create(
-        container=portal,
-        type="ReferenceContent",
-        id="reference-content",
-        title="My Reference",
-        proxied_content=[RelationValue(doc_intid)],
-    )
-    reference_event = api.content.create(
-        container=portal,
-        type="ReferenceContent",
-        id="reference-event",
-        title="My Reference Event",
-        proxied_content=[RelationValue(event_intid)],
-    )
+@pytest.mark.functional
+def test_reference_content_can_update_its_id(create_contents):
+    proxied_doc, reference_content = create_contents
+
+    assert reference_content.getId() == proxied_doc.getId() + "-1"
+
+    reference_content.id = "my-new-id"
     transaction.commit()
+
+    assert reference_content.getId() != proxied_doc.getId() + "-1"
+    assert reference_content.getId() == "my-new-id"
+
+
+@pytest.mark.functional
+def test_reference_content_cant_update_its_title(create_contents):
+    proxied_doc, reference_content = create_contents
+
+    assert reference_content.title == proxied_doc.title
+    assert reference_content.Title() == proxied_doc.Title()
+
+    reference_content.title = "Foo"
+    transaction.commit()
+
+    assert reference_content.title != "Foo"
+    assert reference_content.Title() != "Foo"
+    assert reference_content.title == proxied_doc.Title()
+    assert reference_content.Title() == proxied_doc.Title()
+
+
+@pytest.mark.functional
+def test_reference_content_proxies_catalog_metadata(
+    create_contents, create_event_ref, catalog
+):
+    """Validate that the reference content indexes proxied metadata."""
+    proxied_doc, reference_content = create_contents
+    proxied_event, reference_event = create_event_ref
 
     doc_ref_brain = catalog(UID=reference_content.UID())[0]
     event_ref_brain = catalog(UID=reference_event.UID())[0]
@@ -65,42 +63,19 @@ def test_reference_content_proxies_catalog_metadata(request, functional):
     assert doc_ref_brain.Subject == proxied_doc.subject
     assert doc_ref_brain.portal_type == proxied_doc.portal_type
 
-    # The id should be from the ReferenceContent itself
-    assert doc_ref_brain.getId == "reference-content"
+    # The id should be from the ReferenceContent itself but with -1 (because they are in the same folder)
+    assert doc_ref_brain.getId == proxied_doc.id + "-1"
     assert reference_content.UID() == doc_ref_brain.UID
 
-    # reference event also have start/end metadata
+    # reference event also have start/end metadata for events for example
     assert event_ref_brain.start == proxied_event.start
     assert event_ref_brain.end == proxied_event.end
 
 
 @pytest.mark.functional
-def test_reference_content_get_sync_also_on_status_change(request, functional):
+def test_reference_content_get_sync_also_on_status_change(create_contents, catalog):
     """"""
-    portal = functional["portal"]
-    setRoles(portal, TEST_USER_ID, ["Manager"])
-    catalog = api.portal.get_tool("portal_catalog")
-    intids = getUtility(IIntIds)
-
-    proxied_doc = api.content.create(
-        container=portal,
-        type="Document",
-        id="proxied-doc",
-        title="Proxied Document",
-        description="This is the description.",
-        subject=["one", "two"],
-    )
-    doc_intid = intids.getId(proxied_doc)
-
-    reference_content = api.content.create(
-        container=portal,
-        type="ReferenceContent",
-        id="reference-content",
-        title="My Reference",
-        proxied_content=[RelationValue(doc_intid)],
-    )
-
-    transaction.commit()
+    proxied_doc, reference_content = create_contents
 
     brain = catalog(UID=reference_content.UID())[0]
 
@@ -117,45 +92,23 @@ def test_reference_content_get_sync_also_on_status_change(request, functional):
 
 @pytest.mark.functional
 def test_reference_content_get_sync_on_original_content_modify_event(
-    request, functional
+    create_contents, catalog
 ):
     """"""
-    portal = functional["portal"]
-    setRoles(portal, TEST_USER_ID, ["Manager"])
-    catalog = api.portal.get_tool("portal_catalog")
-    intids = getUtility(IIntIds)
-
-    proxied_doc = api.content.create(
-        container=portal,
-        type="Document",
-        id="proxied-doc",
-        title="Proxied Document",
-        description="This is the description.",
-    )
-    doc_intid = intids.getId(proxied_doc)
-
-    reference_content = api.content.create(
-        container=portal,
-        type="ReferenceContent",
-        id="reference-content",
-        title="My Reference",
-        proxied_content=[RelationValue(doc_intid)],
-    )
-
-    transaction.commit()
+    proxied_doc, reference_content = create_contents
 
     brain = catalog(UID=reference_content.UID())[0]
 
     assert brain.Title == proxied_doc.title
     assert brain.Description == proxied_doc.description
     assert brain.Subject == proxied_doc.subject
-    assert proxied_doc.subject == ()
+    assert proxied_doc.subject == ("one", "two")
 
-    proxied_doc.subject = ("one", "two")
+    proxied_doc.subject = ()
 
     notify(ObjectModifiedEvent(proxied_doc))
     transaction.commit()
 
     brain = catalog(UID=reference_content.UID())[0]
     assert brain.Subject == proxied_doc.subject
-    assert proxied_doc.subject == ("one", "two")
+    assert proxied_doc.subject == ()

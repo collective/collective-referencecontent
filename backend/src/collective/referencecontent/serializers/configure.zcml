@@ -3,9 +3,4 @@
   <!-- Serializers -->
   <adapter factory=".reference_content.SerializeToJson" />
 
-  <utility
-      factory=".summary.JSONSummarySerializerMetadata"
-      name="collective.referencecontent.summary_serializer_metadata"
-      />
-
 </configure>

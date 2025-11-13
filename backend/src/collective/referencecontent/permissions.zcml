@@ -9,5 +9,9 @@
       id="collective.referencecontent.AddReferenceContent"
       title="collective.referencecontent: Add ReferenceContent"
       />
+  <permission
+      id="collective.referencecontent.ManageSettings"
+      title="collective.referencecontent: Manage Settings"
+      />
 
 </configure>

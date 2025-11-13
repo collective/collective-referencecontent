@@ -11,10 +11,12 @@ from zope.intid.interfaces import IIntIds
 def get_references(context):
     catalog = getUtility(ICatalog)
     intids = getUtility(IIntIds)
-    return catalog.findRelations({
-        "to_id": intids.getId(aq_inner(context)),
-        "from_attribute": "proxied_content",
-    })
+    return catalog.findRelations(
+        {
+            "to_id": intids.getId(aq_inner(context)),
+            "from_attribute": "proxied_content",
+        }
+    )
 
 
 def onModify(context, event):
@@ -40,6 +42,4 @@ def onWorkflowTransition(context, event):
         reference_obj = rel.from_object
         if reference_obj:
             with suppress(InvalidParameterError):
-                api.content.transition(
-                    obj=reference_obj, transition=event.transition.id
-                )
+                api.content.transition(obj=reference_obj, to_state=event.new_state.id)

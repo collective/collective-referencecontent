@@ -6,5 +6,12 @@
     >
 
   <!-- -*- extra stuff goes here -*- -->
+  <browser:page
+      class=".settings.ReferenceContentSettings"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      layer="collective.referencecontent.interfaces.IBrowserLayer"
+      name="reference-content-settings"
+      permission="collective.referencecontent.ManageSettings"
+  />
 
 </configure>

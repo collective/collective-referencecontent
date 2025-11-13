@@ -25,23 +25,18 @@ ATTRS_TO_KEEP = [
 class ReferenceContentIndexableWrapper(IndexableObjectWrapper):
     """Makes CTProxy behave like its target during indexing."""
 
-    @property
-    def proxied_content(self):
-        context = self._getWrappedObject()
-        proxied_ref = getattr(context, "proxied_content", None)
-        if not proxied_ref:
-            return None
-        catalog = api.portal.get_tool(name="portal_catalog")
-        proxied_content = proxied_ref[0].to_object
-        if proxied_content:
-            return queryMultiAdapter((proxied_content, catalog), IIndexableObject)
-        return None
-
     def __getattr__(self, name):
         """
         Copy indexes/metadata from the proxied content, except a subset.
         """
-        if name in ATTRS_TO_KEEP or not self.proxied_content:
+        context = self._getWrappedObject()
+        item = context.get_proxied_content()
+        if not item:
+            return None
+        catalog = api.portal.get_tool(name="portal_catalog")
+        proxied_content = queryMultiAdapter((item, catalog), IIndexableObject)
+
+        if name in ATTRS_TO_KEEP or not proxied_content:
             return super().__getattr__(name)
 
-        return getattr(self.proxied_content, name)
+        return getattr(proxied_content, name)
