@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { defineMessages, useIntl } from 'react-intl';
 import Toast from '@plone/volto/components/manage/Toast/Toast';
 import { flattenToAppURL } from '@plone/volto/helpers/Url/Url';
-import FormattedDate from '@plone/volto/components/theme/FormattedDate/FormattedDate';
+// import FormattedDate from '@plone/volto/components/theme/FormattedDate/FormattedDate';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
 const messages = defineMessages({
