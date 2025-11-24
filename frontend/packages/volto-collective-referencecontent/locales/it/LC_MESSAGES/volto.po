@@ -11,7 +11,12 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. Default: "This is a reference of {title}"
+#. Default: "Original content is {title}"
 #: components/ReferenceContentToastsFactory/ReferenceContentToastsFactory
-msgid "This is a reference of {title}"
-msgstr "Questo è un contenuto proxy per {title}"
+msgid "reference-content-toast-text"
+msgstr "Il contenuto originale è {title}"
+
+#. Default: "This is a reference content"
+#: components/ReferenceContentToastsFactory/ReferenceContentToastsFactory
+msgid "reference-content-toast-title"
+msgstr "Questo è un contenuto proxy"

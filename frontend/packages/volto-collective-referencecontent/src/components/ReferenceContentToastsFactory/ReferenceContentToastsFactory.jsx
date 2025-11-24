@@ -9,9 +9,13 @@ import { flattenToAppURL } from '@plone/volto/helpers/Url/Url';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
 const messages = defineMessages({
-  thisIsAReferenceOf: {
-    id: 'This is a reference of {title}',
-    defaultMessage: 'This is a reference of {title}',
+  referenceOfTitle: {
+    id: 'reference-content-toast-title',
+    defaultMessage: 'This is a reference content',
+  },
+  referenceOfText: {
+    id: 'reference-content-toast-text',
+    defaultMessage: 'Original content is {title}',
   },
 });
 
@@ -23,12 +27,13 @@ const ReferenceContentToastsFactory = (props) => {
   const title = content?.title;
   const data = content?.proxied_content || [];
   const proxied_content = data.length === 1 ? data[0] : null;
+  const actions = content['@components']?.actions?.object || [];
+  const canEdit = actions.some((item) => item.id === 'edit');
 
   useDeepCompareEffect(() => {
-    if (proxied_content) {
-      let toastMessage, toastTitle;
-      toastMessage = messages.thisIsAReferenceOf;
-      toastTitle = (
+    if (proxied_content && canEdit) {
+      const toastMessage = messages.referenceOfText;
+      const toastLink = (
         <Link to={flattenToAppURL(proxied_content['@id'])}>
           {proxied_content?.title}
         </Link>
@@ -38,9 +43,10 @@ const ReferenceContentToastsFactory = (props) => {
         toast.update('referenceOfInfo', {
           render: (
             <Toast
-              i
-              title={intl.formatMessage(toastMessage, {
-                title: toastTitle,
+              info
+              title={intl.formatMessage(messages.referenceOfTitle)}
+              content={intl.formatMessage(toastMessage, {
+                title: toastLink,
               })}
             />
           ),
@@ -49,8 +55,9 @@ const ReferenceContentToastsFactory = (props) => {
         toast.info(
           <Toast
             info
-            title={intl.formatMessage(toastMessage, {
-              title: toastTitle,
+            title={intl.formatMessage(messages.referenceOfTitle)}
+            content={intl.formatMessage(toastMessage, {
+              title: toastLink,
             })}
           />,
           {
@@ -62,7 +69,7 @@ const ReferenceContentToastsFactory = (props) => {
         );
       }
     }
-    if (!proxied_content) {
+    if (!proxied_content || !canEdit) {
       if (toast.isActive('referenceOfInfo')) {
         toast.dismiss('referenceOfInfo');
       }

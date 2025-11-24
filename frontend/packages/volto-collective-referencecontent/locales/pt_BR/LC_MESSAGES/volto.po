@@ -16,7 +16,12 @@ msgstr ""
 "Preferred-Encodings: utf-8\n"
 "Domain: volto\n"
 
-#. Default: "This is a reference of {title}"
+#. Default: "Original content is {title}"
 #: components/ReferenceContentToastsFactory/ReferenceContentToastsFactory
-msgid "This is a reference of {title}"
+msgid "reference-content-toast-text"
+msgstr ""
+
+#. Default: "This is a reference content"
+#: components/ReferenceContentToastsFactory/ReferenceContentToastsFactory
+msgid "reference-content-toast-title"
 msgstr ""
