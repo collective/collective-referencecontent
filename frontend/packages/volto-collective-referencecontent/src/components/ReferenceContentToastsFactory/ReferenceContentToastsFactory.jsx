@@ -27,7 +27,7 @@ const ReferenceContentToastsFactory = (props) => {
   const title = content?.title;
   const data = content?.proxied_content || [];
   const proxied_content = data.length === 1 ? data[0] : null;
-  const actions = content['@components']?.actions?.object || [];
+  const actions = content?.['@components']?.actions?.object || [];
   const canEdit = actions.some((item) => item.id === 'edit');
 
   useDeepCompareEffect(() => {
