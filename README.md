@@ -15,19 +15,18 @@ This is a Plone Add-On that allows to create content aliases.
 
 ## Features
 
-There is a new content-type called **ReferenceContent** that can be related to any other content in the site.
+There is a new content type called **ReferenceContent**, which can be related to any other content on the site.
 
-When a ReferenceContent refers to a content, it will proxy the original content features:
+When a ReferenceContent refers to another content item, it will proxy the original content’s features:
 
-- data (both on catalog and restapi serializers. When the referenced content gets updated, also the proxy inherit these changes)
-- workflow/review_state (when the referenced content change its status, the proxy will reflect this transaction)
+- Data (both in catalog and REST API serializers). When the referenced content is updated, the proxy automatically inherits those changes.
+- Workflow / review state. When the referenced content changes its state, the proxy reflects this transition as well.
 
-On a ReferenceContent by default you can only edit the referenced item and its short name (id). By default it gets the original one.
+By default, in a ReferenceContent item you can only edit the referenced item and its short name (id). By default, the short name is taken from the original content.
 
-All data is proxied from the original content, but if you need to add some extra data to ReferenceContent, you can enable aadditional behaviors.
+All data is proxied from the original content. However, if you need to add extra data to ReferenceContent, you can enable additional behaviors.
 
-In this case, the fields from these behaviors are appended to the proxy data. If it's a field in common with the referenced content (for example if you add *plone.categorization* behavior), the proxy one always win.
-
+In that case, the fields provided by these behaviors are appended to the proxy’s data. If there is a field in common with the referenced content (for example, if you add the plone.categorization behavior), the field defined in the proxy always takes precedence.
 
 ## Quick Start 🏁
 
