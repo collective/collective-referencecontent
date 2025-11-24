@@ -1,7 +1,6 @@
-# collective-referencecontent
+# Plone Add-On for alias contents (volto-collective-referencecontent)
 
-This is a Plone Add-On that allows to create content aliases.
-
+A new project using Plone 6.
 
 [![npm](https://img.shields.io/npm/v/volto-collective-referencecontent)](https://www.npmjs.com/package/volto-collective-referencecontent)
 [![](https://img.shields.io/badge/-Storybook-ff4785?logo=Storybook&logoColor=white&style=flat-square)](https://collective.github.io/volto-collective-referencecontent/)
@@ -10,21 +9,9 @@ This is a Plone Add-On that allows to create content aliases.
 
 ## Features
 
-There is a new content-type called **ReferenceContent** that can be related to any other content in the site.
+<!-- List your awesome features here -->
 
-When a ReferenceContent refers to a content, it will proxy the original content features:
-
-- data (both on catalog and restapi serializers. When the referenced content gets updated, also the proxy inherit these changes)
-- workflow/review_state (when the referenced content change its status, the proxy will reflect this transaction)
-
-On a ReferenceContent by default you can only edit the referenced item and its short name (id). By default it gets the original one.
-
-All data is proxied from the original content, but if you need to add some extra data to ReferenceContent, you can enable aadditional behaviors.
-
-In this case, the fields from these behaviors are appended to the proxy data. If it's a field in common with the referenced content (for example if you add *plone.categorization* behavior), the proxy one always win.
-
-
-## Frontend installation
+## Installation
 
 To install your project, you must choose the method appropriate to your version of Volto.
 
@@ -86,10 +73,9 @@ Start Volto.
 yarn start
 ```
 
+## Test installation
 
-## Backend installation
-
-Add the package to your project and installing it with pip.
+Visit http://localhost:3000/ in a browser, login, and check the awesome new features.
 
 
 ## Development
