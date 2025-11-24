@@ -39,6 +39,12 @@ test = [
     "pytest-plone>=0.5.0",
 ]
 
+release = [
+    "zest.releaser[recommended]",
+    "zestreleaser.towncrier",
+    "zest.pocompile",
+]
+
 [project.urls]
 Homepage = "https://github.com/collective/collective-referencecontent"
 PyPI = "https://pypi.org/project/collective.referencecontent"
@@ -179,3 +185,6 @@ parallel = true
 omit = [
   "src/collective/referencecontent/locales/*.py",
 ]
+
+[tool.zest-releaser]
+python-file-with-version = "src/{{ cookiecutter.__package_path }}/__init__.py"

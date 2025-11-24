@@ -153,3 +153,9 @@ acceptance-image-build:  ## Build Docker Images
 ## Add bobtemplates features (check bobtemplates.plone's documentation to get the list of available features)
 add: $(VENV_FOLDER)
 	@uvx --with case-conversion==2.1.0 plonecli -- add -b .mrbob.ini $(filter-out $@,$(MAKECMDGOALS))
+
+.PHONY: release
+release: $(VENV_FOLDER) ## Create a release
+	@echo "$(GREEN)==> Create a release$(RESET)"
+	@uv pip install -e ".[release]"
+	@uv run fullrelease

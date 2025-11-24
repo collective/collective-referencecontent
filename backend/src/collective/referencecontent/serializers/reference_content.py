@@ -37,19 +37,6 @@ class SerializeToJson(DXSerializeToJson):
                 proxied[attr] = base[attr]
         # use base value for the attributes explictely definied in the schema
         for schema in iterSchemata(self.context):
-            # skip schema that we can fetch from original (evaluate to
-            # remove some behaviors from the CT)
-            if schema.getName() in [
-                "IBasic",
-                "IAllowDiscussion",
-                "IExcludeFromNavigation",
-                "IShortName",
-                "IOwnership",
-                "IPublication",
-                "ICategorization",
-            ]:
-                logger.debug("skipping", schema.getName())
-                continue
             for attr in schema.names():
                 if attr in base:
                     proxied[attr] = base[attr]
