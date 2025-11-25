@@ -1,7 +1,7 @@
 from plone import api
-from transaction import commit
 from plone.app.testing import login
 from plone.app.testing import logout
+from transaction import commit
 
 import pytest
 
