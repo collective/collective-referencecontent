@@ -1,5 +1,7 @@
 from plone import api
 from transaction import commit
+from plone.app.testing import login
+from plone.app.testing import logout
 
 import pytest
 
@@ -55,6 +57,42 @@ def test_when_change_state_from_proxied_content_reference_content_also_change_st
 
     assert api.content.get_state(obj=proxied_doc) == "private"
     assert api.content.get_state(obj=reference_content) == "private"
+
+    api.content.transition(obj=proxied_doc, transition="publish")
+    commit()
+
+    assert api.content.get_state(obj=proxied_doc) == "published"
+    assert api.content.get_state(obj=reference_content) == "published"
+
+
+@pytest.mark.functional
+def test_when_a_reviewer_update_proxied_content_state_and_proxies_will_be_synced_also_if_he_dont_have_permissions(
+    manager_portal, create_contents, additional_user
+):
+    """"""
+    proxied_doc, reference_content = create_contents
+
+    api.user.grant_roles(
+        username=additional_user["id"], roles=["Reviewer"], obj=proxied_doc
+    )
+    commit()
+
+    # check user roles on both objects
+    assert set(api.user.get_roles(username=additional_user["id"], obj=proxied_doc)) == {
+        "Authenticated",
+        "Member",
+        "Reviewer",
+    }
+    assert set(
+        api.user.get_roles(username=additional_user["id"], obj=reference_content)
+    ) == {
+        "Authenticated",
+        "Member",
+    }
+
+    # now login as additional_user and try to change state of proxied_doc
+    logout()
+    login(manager_portal, additional_user["id"])
 
     api.content.transition(obj=proxied_doc, transition="publish")
     commit()

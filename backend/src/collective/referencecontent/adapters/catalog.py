@@ -31,8 +31,11 @@ class ReferenceContentIndexableWrapper(IndexableObjectWrapper):
         """
         context = self._getWrappedObject()
         item = context.get_proxied_content()
+
         if not item:
-            return None
+            # item has been deleted, so just return the default behavior
+            return super().__getattr__(name)
+
         catalog = api.portal.get_tool(name="portal_catalog")
         proxied_content = queryMultiAdapter((item, catalog), IIndexableObject)
 

@@ -18,11 +18,13 @@ pytest_plugins = ["pytest_plone"]
 
 
 globals().update(
-    fixtures_factory((
-        (ACCEPTANCE_TESTING, "acceptance"),
-        (FUNCTIONAL_TESTING, "functional"),
-        (INTEGRATION_TESTING, "integration"),
-    ))
+    fixtures_factory(
+        (
+            (ACCEPTANCE_TESTING, "acceptance"),
+            (FUNCTIONAL_TESTING, "functional"),
+            (INTEGRATION_TESTING, "integration"),
+        )
+    )
 )
 
 
@@ -44,6 +46,26 @@ def intids():
 def catalog():
     """Portal catalog."""
     return api.portal.get_tool("portal_catalog")
+
+
+@pytest.fixture
+def additional_user(manager_portal):
+    """Create an additional user with Member role."""
+    user_id = "user_test_id"
+    user_password = "user_password"
+
+    # 1. Crea l'utente
+    try:
+        api.user.create(
+            email=f"{user_id}@test.com",
+            username=user_id,
+            password=user_password,
+            roles=["Member"],
+        )
+    except api.exc.UserExistsError:
+        pass
+
+    return {"id": user_id, "password": user_password}
 
 
 @pytest.fixture
