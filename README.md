@@ -5,7 +5,6 @@
 [![Backend Tests](https://github.com/collective/collective-referencecontent/actions/workflows/backend.yml/badge.svg)](https://github.com/collective/collective-referencecontent/actions/workflows/backend.yml)
 [![Frontend Tests](https://github.com/collective/collective-referencecontent/actions/workflows/frontend.yml/badge.svg)](https://github.com/collective/collective-referencecontent/actions/workflows/frontend.yml)
 [![npm](https://img.shields.io/npm/v/volto-collective-referencecontent)](https://www.npmjs.com/package/volto-collective-referencecontent)
-[![](https://img.shields.io/badge/-Storybook-ff4785?logo=Storybook&logoColor=white&style=flat-square)](https://collective.github.io/volto-collective-referencecontent/)
 [![CI](https://github.com/collective/collective-referencecontent/actions/workflows/main.yml/badge.svg)](https://github.com/collective/collective-referencecontent/actions/workflows/main.yml)
 
 This is a Plone Add-On that allows to create content aliases.
