@@ -3,7 +3,6 @@ from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
 import pytest
-import transaction
 
 
 @pytest.mark.functional
@@ -24,7 +23,6 @@ def test_reference_content_can_update_its_id(create_contents):
     assert reference_content.getId() == proxied_doc.getId() + "-1"
 
     reference_content.id = "my-new-id"
-    transaction.commit()
 
     assert reference_content.getId() != proxied_doc.getId() + "-1"
     assert reference_content.getId() == "my-new-id"
@@ -38,7 +36,6 @@ def test_reference_content_cant_update_its_title(create_contents):
     assert reference_content.Title() == proxied_doc.Title()
 
     reference_content.title = "Foo"
-    transaction.commit()
 
     assert reference_content.title != "Foo"
     assert reference_content.Title() != "Foo"
@@ -83,7 +80,6 @@ def test_reference_content_get_sync_also_on_status_change(create_contents, catal
     assert brain.review_state == api.content.get_state(obj=proxied_doc)
 
     api.content.transition(obj=proxied_doc, transition="publish")
-    transaction.commit()
 
     brain = catalog(UID=reference_content.UID())[0]
     assert api.content.get_state(obj=proxied_doc) == "published"
@@ -107,7 +103,6 @@ def test_reference_content_get_sync_on_original_content_modify_event(
     proxied_doc.subject = ()
 
     notify(ObjectModifiedEvent(proxied_doc))
-    transaction.commit()
 
     brain = catalog(UID=reference_content.UID())[0]
     assert brain.Subject == proxied_doc.subject

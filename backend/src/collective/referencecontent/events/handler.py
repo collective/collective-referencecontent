@@ -1,11 +1,15 @@
 from Acquisition import aq_inner
 from collective.referencecontent.interfaces import IBrowserLayer
-from contextlib import suppress
 from plone import api
 from plone.api.exc import InvalidParameterError
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_references(context):
@@ -39,8 +43,15 @@ def onWorkflowTransition(context, event):
     for rel in relations:
         reference_obj = rel.from_object
         if reference_obj:
-            with api.env.adopt_roles(["Reviewer"]):
-                with suppress(InvalidParameterError):
+            with api.env.adopt_roles(["Manager"]):
+                try:
                     api.content.transition(
-                        obj=reference_obj, to_state=event.new_state.id
+                        obj=reference_obj, transition=event.transition.getId()
                     )
+                except InvalidParameterError:
+                    logger.error(
+                        "unable to apply transition %s to object %s",
+                        event.transition.getId(),
+                        reference_obj,
+                    )
+                    # raise
