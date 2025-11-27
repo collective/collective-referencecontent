@@ -17,12 +17,10 @@ logger = logging.getLogger(__name__)
 def get_references(context):
     catalog = getUtility(ICatalog)
     intids = getUtility(IIntIds)
-    return catalog.findRelations(
-        {
-            "to_id": intids.getId(aq_inner(context)),
-            "from_attribute": "proxied_content",
-        }
-    )
+    return catalog.findRelations({
+        "to_id": intids.getId(aq_inner(context)),
+        "from_attribute": "proxied_content",
+    })
 
 
 def on_modify(context, event):
