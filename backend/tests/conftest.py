@@ -50,19 +50,14 @@ def catalog():
 def additional_user(manager_portal):
     """Create an additional user with Member role."""
     user_id = "user_test_id"
-    user_password = "user_password"
+    user_password = "user_password"  # noqa: S105
 
-    # 1. Crea l'utente
-    try:
-        api.user.create(
-            email=f"{user_id}@test.com",
-            username=user_id,
-            password=user_password,
-            roles=["Member"],
-        )
-    except api.exc.UserExistsError:
-        pass
-
+    api.user.create(
+        email=f"{user_id}@test.com",
+        username=user_id,
+        password=user_password,
+        roles=["Member"],
+    )
     return {"id": user_id, "password": user_password}
 
 

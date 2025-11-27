@@ -2,6 +2,7 @@ from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
 from transaction import commit
+from z3c.relationfield.relation import RelationValue
 
 import pytest
 
@@ -36,8 +37,6 @@ def test_reference_content_inherit_wf_from_proxied_content(
     wf_tool = api.portal.get_tool(name="portal_workflow")
     wf_tool.setChainForPortalTypes(["Event"], "intranet_workflow")
 
-    commit()
-
     assert wf_tool.getChainForPortalType("ReferenceContent") == (
         "simple_publication_workflow",
     )
@@ -59,7 +58,6 @@ def test_when_change_state_from_proxied_content_reference_content_also_change_st
     assert api.content.get_state(obj=reference_content) == "private"
 
     api.content.transition(obj=proxied_doc, transition="publish")
-    commit()
 
     assert api.content.get_state(obj=proxied_doc) == "published"
     assert api.content.get_state(obj=reference_content) == "published"
@@ -69,33 +67,90 @@ def test_when_change_state_from_proxied_content_reference_content_also_change_st
 def test_when_a_reviewer_update_proxied_content_state_and_proxies_will_be_synced_also_if_he_dont_have_permissions(
     manager_portal, create_contents, additional_user
 ):
-    """"""
+    """
+    plone_workflow is the most complex workflow with different permissions in various transitions
+    """
+    wf_tool = api.portal.get_tool(name="portal_workflow")
+    wf_tool.setChainForPortalTypes(["Document"], "plone_workflow")
+
     proxied_doc, reference_content = create_contents
 
-    api.user.grant_roles(
-        username=additional_user["id"], roles=["Reviewer"], obj=proxied_doc
-    )
-    commit()
+    assert wf_tool.getChainFor(proxied_doc) == ("plone_workflow",)
+    assert wf_tool.getChainFor(reference_content) == ("plone_workflow",)
+
+    # default state is "visible" aka "Public Draft"
+    assert api.content.get_state(obj=proxied_doc) == "visible"
+    assert api.content.get_state(obj=reference_content) == "visible"
+
+    user_id = additional_user["id"]
+
+    api.user.grant_roles(username=user_id, roles=["Manager"], obj=proxied_doc)
 
     # check user roles on both objects
-    assert set(api.user.get_roles(username=additional_user["id"], obj=proxied_doc)) == {
+    assert set(api.user.get_roles(user_id, obj=proxied_doc)) == {
         "Authenticated",
         "Member",
-        "Reviewer",
+        "Manager",
     }
-    assert set(
-        api.user.get_roles(username=additional_user["id"], obj=reference_content)
-    ) == {
+    assert set(api.user.get_roles(username=user_id, obj=reference_content)) == {
         "Authenticated",
         "Member",
     }
 
     # now login as additional_user and try to change state of proxied_doc
     logout()
-    login(manager_portal, additional_user["id"])
+    login(manager_portal, user_id)
 
     api.content.transition(obj=proxied_doc, transition="publish")
-    commit()
-
     assert api.content.get_state(obj=proxied_doc) == "published"
     assert api.content.get_state(obj=reference_content) == "published"
+
+    # "Request review" is the permission needed for "retract" transition, current
+    # user hasn't this permission on reference_content but has it on proxied_doc
+    assert not api.user.has_permission(
+        permission="Request review", username=user_id, obj=reference_content
+    )
+    assert api.user.has_permission(
+        permission="Request review", username=user_id, obj=proxied_doc
+    )
+    api.content.transition(obj=proxied_doc, transition="retract")
+    assert api.content.get_state(obj=proxied_doc) == "visible"
+    assert api.content.get_state(obj=reference_content) == "visible"
+
+    api.content.transition(obj=proxied_doc, transition="hide")
+    assert api.content.get_state(obj=proxied_doc) == "private"
+    assert api.content.get_state(obj=reference_content) == "private"
+
+
+@pytest.mark.functional
+def test_create_a_reference_content_and_link_to_a_content_with_different_state_from_initial_state_will_sync_its_review_state(
+    manager_portal, create_contents, intids
+):
+    """
+    we use intranet_workflow because have a final state (external) that need to follow 2 transitions steps.
+    """
+    wf_tool = api.portal.get_tool(name="portal_workflow")
+    wf_tool.setChainForPortalTypes(["Document"], "intranet_workflow")
+
+    proxied_doc, reference_content = create_contents
+
+    # default state is "internal"
+    assert api.content.get_state(obj=proxied_doc) == "internal"
+    assert api.content.get_state(obj=reference_content) == "internal"
+
+    # now publish externally the proxied_doc
+    api.content.transition(obj=proxied_doc, transition="submit")
+    api.content.transition(obj=proxied_doc, transition="publish_externally")
+    assert api.content.get_state(obj=proxied_doc) == "external"
+    assert api.content.get_state(obj=reference_content) == "external"
+
+    # and create a new reference content linked to the already published proxied_doc
+    doc_intid = intids.getId(proxied_doc)
+    new_reference_content = api.content.create(
+        container=manager_portal,
+        type="ReferenceContent",
+        title="",
+        proxied_content=[RelationValue(doc_intid)],
+    )
+    commit()
+    assert api.content.get_state(obj=new_reference_content) == "external"
