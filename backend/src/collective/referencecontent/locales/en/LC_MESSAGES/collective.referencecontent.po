@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-11-13 13:52+0000\n"
+"POT-Creation-Date: 2025-11-27 09:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,6 +41,11 @@ msgstr ""
 
 #: collective/referencecontent/profiles.zcml:30
 msgid "Uninstall Plone Add-On for alias contents setup."
+msgstr ""
+
+#. Default: "Cannot delete \"${title}\". It is referenced by Reference Content items."
+#: collective/referencecontent/events/handler.py:104
+msgid "cannot_delete_msg"
 msgstr ""
 
 #. Default: "Proxied content"

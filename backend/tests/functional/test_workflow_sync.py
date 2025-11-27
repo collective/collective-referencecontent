@@ -1,6 +1,8 @@
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
+from transaction import commit
+from z3c.relationfield.relation import RelationValue
 
 import pytest
 
@@ -118,3 +120,37 @@ def test_when_a_reviewer_update_proxied_content_state_and_proxies_will_be_synced
     api.content.transition(obj=proxied_doc, transition="hide")
     assert api.content.get_state(obj=proxied_doc) == "private"
     assert api.content.get_state(obj=reference_content) == "private"
+
+
+@pytest.mark.functional
+def test_create_a_reference_content_and_link_to_a_content_with_different_state_from_initial_state_will_sync_its_review_state(
+    manager_portal, create_contents, intids
+):
+    """
+    we use intranet_workflow because have a final state (external) that need to follow 2 transitions steps.
+    """
+    wf_tool = api.portal.get_tool(name="portal_workflow")
+    wf_tool.setChainForPortalTypes(["Document"], "intranet_workflow")
+
+    proxied_doc, reference_content = create_contents
+
+    # default state is "internal"
+    assert api.content.get_state(obj=proxied_doc) == "internal"
+    assert api.content.get_state(obj=reference_content) == "internal"
+
+    # now publish externally the proxied_doc
+    api.content.transition(obj=proxied_doc, transition="submit")
+    api.content.transition(obj=proxied_doc, transition="publish_externally")
+    assert api.content.get_state(obj=proxied_doc) == "external"
+    assert api.content.get_state(obj=reference_content) == "external"
+
+    # and create a new reference content linked to the already published proxied_doc
+    doc_intid = intids.getId(proxied_doc)
+    new_reference_content = api.content.create(
+        container=manager_portal,
+        type="ReferenceContent",
+        title="",
+        proxied_content=[RelationValue(doc_intid)],
+    )
+    commit()
+    assert api.content.get_state(obj=new_reference_content) == "external"

@@ -1,4 +1,5 @@
 from plone import api
+from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -107,3 +108,19 @@ def test_reference_content_get_sync_on_original_content_modify_event(
     brain = catalog(UID=reference_content.UID())[0]
     assert brain.Subject == proxied_doc.subject
     assert proxied_doc.subject == ()
+
+
+@pytest.mark.functional
+def test_referenced_content_cannot_be_deleted_if_is_referenced(
+    create_contents, catalog
+):
+    """"""
+    proxied_doc, reference_content = create_contents
+
+    with pytest.raises(LinkIntegrityNotificationException):
+        api.content.delete(obj=proxied_doc)
+
+    # After deleting the reference content, the proxied doc can be deleted
+    api.content.delete(obj=reference_content)
+    api.content.delete(obj=proxied_doc)
+    assert len(catalog(UID=proxied_doc.UID())) == 0
