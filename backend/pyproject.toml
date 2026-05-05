@@ -75,7 +75,8 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/collective"]
+packages = ["src/collective/referencecontent"]
+sources = ["src"]
 
 [tool.towncrier]
 directory = "news/"
