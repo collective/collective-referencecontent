@@ -24,6 +24,8 @@ All data is proxied from the original content. However, if you need to add extra
 
 In that case, the fields provided by these behaviors are appended to the proxy’s data. If there is a field in common with the referenced content (for example, if you add the plone.categorization behavior), the field defined in the proxy always takes precedence.
 
+Original content cannot be deleted if there are some ReferenceContent that refers to it.
+
 ## Quick Start 🏁
 
 ### Prerequisites ✅

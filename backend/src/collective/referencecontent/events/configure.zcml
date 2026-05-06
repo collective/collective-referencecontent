@@ -8,13 +8,23 @@
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".handler.onModify"
+      handler=".handler.on_modify"
       />
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            Products.DCWorkflow.interfaces.IAfterTransitionEvent"
-      handler=".handler.onWorkflowTransition"
+      handler=".handler.on_workflow_transition"
       />
 
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           OFS.interfaces.IObjectWillBeRemovedEvent"
+      handler=".handler.on_delete"
+      />
 
+  <subscriber
+      for="collective.referencecontent.content.reference_content.IReferenceContent
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handler.on_create_reference_content"
+      />
 </configure>
