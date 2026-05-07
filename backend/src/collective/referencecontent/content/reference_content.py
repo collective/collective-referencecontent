@@ -13,7 +13,7 @@ from zope.interface import implementer
 from zope.schema import TextLine
 
 
-def get_selectable_types(context=None):
+def get_selectable_types():
     return api.portal.get_registry_record(
         "referenceable_types", interface=IReferenceContentSettings, default=[]
     )
@@ -40,9 +40,9 @@ class IReferenceContent(model.Schema):
         "proxied_content",
         RelatedItemsFieldWidget,
         vocabulary="plone.app.vocabularies.Catalog",
-        pattern_options={
+        pattern_options=lambda: {
             "maximumSelectionSize": 1,
-            "selectableTypes": get_selectable_types,
+            "selectableTypes": get_selectable_types(),
         },
     )
 
