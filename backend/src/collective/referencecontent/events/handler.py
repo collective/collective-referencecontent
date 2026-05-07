@@ -11,8 +11,11 @@ from zope.intid.interfaces import IIntIds
 def get_references(context):
     catalog = getUtility(ICatalog)
     intids = getUtility(IIntIds)
+    obj_id = intids.queryId(aq_inner(context))
+    if obj_id is None:
+        return []
     return catalog.findRelations({
-        "to_id": intids.getId(aq_inner(context)),
+        "to_id": obj_id,
         "from_attribute": "proxied_content",
     })
 
