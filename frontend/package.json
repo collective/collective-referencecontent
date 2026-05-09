@@ -38,7 +38,8 @@
     "volto-collective-referencecontent": "workspace:*"
   },
   "devDependencies": {
-    "mrs-developer": "^2.2.0"
+    "mrs-developer": "^2.2.0",
+    "babel-preset-razzle": "^4.2.18"
   },
   "pnpm": {
     "overrides": {
